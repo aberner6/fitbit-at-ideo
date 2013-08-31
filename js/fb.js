@@ -80,26 +80,13 @@ var sortToggle = sortview.append("text")
 .attr("y", toggleheight-textmargin)
 .attr('fill','grey')
 .attr('class','toggle')
-.text("TOGGLE VIEW");
+// .text("TOGGLE VIEW");
 
 var sectionview = d3.select("#clicked").append("svg")
 .attr("width", width)
 .attr("height", height)
 
-var svg = d3.select("#small_multiples").append("svg")
-    // .attr("width", width)
-    // .attr("height", height);
-         .attr({
-        "width": "100%",
-        "height": "100%"
-      })
-    .attr("viewBox", "0 0 " + width + " " + height )
-    .attr("preserveAspectRatio", "xMinYMin")
-     .attr("pointer-events", "all")
-     ///////////will this work
-     .append("g")
-    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-.append("g");
+
 
 var rect = sectionview.selectAll("rect")
 function highlight(){
@@ -242,14 +229,33 @@ rect.on('click', function(d,i){
 
 
 
+var svg = d3.select("#small_multiples").append("svg")
+    // .attr("width", width)
+    // .attr("height", height);
+         .attr({
+        "width": "100%",
+        "height": "100%"
+      })
+    .attr("viewBox", "0 0 " + width + " " + height )
+    .attr("preserveAspectRatio", "xMinYMin")
+     .attr("pointer-events", "all")
+     ///////////will this work
+     .append("g");
 
 
 
+  var node = svg.selectAll(".node")
+    .data(graph.nodes)
+    .enter().append("svg:g")
+    .attr("class", "node")
+    .call(force.drag);
 
+doNodes();
 
-
-
-
+function doNodes(){
+svg
+    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+.append("g");
 
 force
   .links(graph.links)
@@ -268,11 +274,11 @@ force.on("tick", function() {
     });
 });
 
-  var node = svg.selectAll(".node")
-    .data(graph.nodes)
-    .enter().append("svg:g")
-    .attr("class", "node")
-    .call(force.drag);
+  // var node = svg.selectAll(".node")
+  //   .data(graph.nodes)
+  //   .enter().append("svg:g")
+  //   .attr("class", "node")
+  //   .call(force.drag);
 
 function redraw() {
   node.attr("transform",
@@ -320,8 +326,7 @@ function redraw() {
 function zoom() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
-
-
+}
 
 
 
@@ -330,28 +335,47 @@ function zoom() {
 var b=0;
 var a=0;
 
-//not node.on
-sortToggle.on('click', function(d,i) {
-  console.log("sectiontoggleOn")
-  if (b===0){
-    //call the section names up
-    highlight();
-    //show them slowly
-        $("#clicked").show("slow",function(){
-        })
+
+  d3.select('toggleTimeline').on('click', function(){
+      console.log("toggleTimelineOn")
+      highlight();
       $("#small_multiples").hide("slow",function(){
       })
-    }
-  else if (b===1){
-    //if you click the section toggle button go back to the original visual
-     goBack();
-    //and hide the section spread
-    $("#small_multiples").show("slow",function(){
+      $("#clicked").show("slow",function(){
       })
+  })
+  d3.select('toggleCluster').on('click', function(){
+      console.log("toggleClusterOn")
+      doNodes();
+      //show them slowly
       $("#clicked").hide("slow",function(){
       })
-    }
-});
+      $("#small_multiples").show("slow",function(){
+      })
+  })
+
+//not node.on
+// sortToggle.on('click', function(d,i) {
+//   console.log("sectiontoggleOn")
+//   if (b===0){
+//     //call the section names up
+//     highlight();
+//     //show them slowly
+//         $("#clicked").show("slow",function(){
+//         })
+//       $("#small_multiples").hide("slow",function(){
+//       })
+//     }
+//   else if (b===1){
+//     //if you click the section toggle button go back to the original visual
+//      goBack();
+//     //and hide the section spread
+//     $("#small_multiples").show("slow",function(){
+//       })
+//       $("#clicked").hide("slow",function(){
+//       })
+//     }
+// });
 function goBack(){
   b=0;
 }
