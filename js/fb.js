@@ -2,7 +2,7 @@ d3.json("https://dl.dropboxusercontent.com/u/97059/fitbit/fitbit.json", function
 // console.log(graph.nodes[0]);
 
 var width = "1980",
-    height = "1050";
+    height = "1000";
 
 var toggleVieww = 150; //svg toggle boxes height
 var toggleViewh = 40; //svg toggle boxes height
@@ -30,15 +30,13 @@ hackC = "#46C3D2";
 hackC2 = "#26a3b2";
 driveC = "#FFCE00";
 driveC2 = "#dFaE00";
+global = "#2A329B";
 
 var scoreMult = 3000;
 
 var color = d3.scale.category20();
 
-// var vis = d3.select("body").append("svg:svg")
-//     .attr("viewBox", "0 0 " + w + " " + h )
-//     .attr("preserveAspectRatio", "xMinYMin")
-
+console.log(graph);
 var maxResponse = d3.max(graph.nodes, function(d,i) { return i;} );
 console.log(maxResponse);
 
@@ -67,20 +65,6 @@ var force = d3.layout.force()
     .gravity(.2)
     .size([width, height]);
 
-var max = d3.max(graph.nodes, function(d,i){
-  // return 
-})
-
-var sortview = d3.select("#click").append("svg")
-.attr("width", toggleVieww)
-.attr("height", toggleViewh);
-
-var sortToggle = sortview.append("text")
-.attr("x", lmargin)
-.attr("y", toggleheight-textmargin)
-.attr('fill','grey')
-.attr('class','toggle')
-// .text("TOGGLE VIEW");
 
 var sectionview = d3.select("#clicked").append("svg")
 .attr("width", width)
@@ -91,17 +75,14 @@ var sectionview = d3.select("#clicked").append("svg")
 var rect = sectionview.selectAll("rect")
 function highlight(){
   b = 1; //for toggle
+
   var rect = sectionview.selectAll("rect")
- // .attr("class", "rollout")
   .data(function(d){ 
     return graph.nodes;
     console.log(d3.ascending(d.score, d.score));
   })
   .enter().append("rect")
-  // .transition()
-    // .delay(100)
-    // .duration(1000) 
-      .attr("x", function(d,i){
+   .attr("x", function(d,i){
     return alongWidth(i);
     })
   .attr("y", function(d,i){ 
@@ -115,15 +96,10 @@ return 0;
     return 0;
   }
 })
-  // .sort(function(a,b){
-  //   return toggleScale(d.score)-toggleScale(d.score)
-  // })
   .attr("height", function(d,i){ 
-    // var disis= toggleScale(d.score);
-    // return d3.ascending(d.score, d.score);
- // return toggleScale(disis);
  return toggleScale(d.score);
     })
+  .attr("opacity",".6")
 
  .attr("fill", function(d){
       if(d.collective == 'Ignite') {
@@ -136,14 +112,11 @@ return 0;
         return hackC;
       } else if(d.collective == 'Drive') {
         return driveC;
-      } else {
-        return "#cccccc";
+      } else if (d.collective == 'Global'){
+        return global;
       }
     })
-      .attr("opacity",".8")
-
-      // .attr("opacity", ".3")
-      .on('mouseover', function(d,i){
+  .on('mouseover', function(d,i){
     d3.select(this)
     .attr("stroke","gray")
     })
@@ -151,33 +124,73 @@ return 0;
     d3.select(this)
     .attr("stroke", "white")
     })
-    // });
-  // .attr("fill", "#EC1162");
-    // .ease("elastic", 10, .3)
-      $('rect').tipsy({ 
+
+  $('rect').tipsy({ 
         gravity: 'nw', 
         html: true, 
         //fade: true,
         title: function() {
           var d = this.__data__;
-          // return d.score+" ("+d.section+")";
           var intit = parseInt(d.score);
           return d.name+" - "+(intit)+" pts";
         }
       });
       var groupis;
       console.log(b);
-rect.on('click', function(d,i){
-      // var name = d.collective;
-  // callout(d.collective);
-  // if (b=1){}
-    console.log("callout");
-  console.log(d.collective);
-  // node
-  var groupis = d.collective;
-  // if (c=0){
+
+  d3.select('toggleDrive').on('click', function(){
+    console.log("toggleDRIVE")
+    var groupis = "Drive";
+    var indexDrive = 0;
+    rect
+    .transition()
+    .attr("opacity", function(d,i){
+      if (d.collective==(groupis)){
+        return "1";
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("x", function(d,i){
+      if (d.collective==(groupis)){
+        indexDrive++;
+      }
+      return indexDrive*20;
+      if (d.collective!=(groupis)) {
+        return -10;
+      }
+    })
+  });
+  d3.select('toggleHack').on('click', function(){
+    console.log("toggleHACK")
+    var groupis = "Hack";
+        var indexHack= 0;
+    rect
+    .transition()
+    .attr("opacity", function(d,i){
+      if (d.collective==(groupis)){
+        return "1";
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("x", function(d,i){
+      if (d.collective==(groupis)){
+        indexHack++;
+      }
+      return indexHack*20;
+      if (d.collective!=(groupis)) {
+        return -10;
+      }
+    })
+  });
+  d3.select('toggleIgnite').on('click', function(){
+      console.log("toggleIGNITE")
+      var groupis = "Ignite";
+      var indexIgnite = 0;
   rect
-// .attr("opacity", "1")
   .transition()
   .attr("opacity", function(d,i){
     if (d.collective==(groupis)){
@@ -187,58 +200,126 @@ rect.on('click', function(d,i){
       return 0;
     }
   })
-      .ease("elastic", 10, .3);
-    // }
+      .attr("x", function(d,i){
+      if (d.collective==(groupis)){
+        indexIgnite++;
+      }
+      return indexIgnite*20;
+      if (d.collective!=(groupis)) {
+        return -10;
+      }
+    })
 });
+ d3.select('toggleRoot').on('click', function(){
+      console.log("toggleROOT")
+      var groupis = "Root";
+      var indexRoot = 0;
+    rect
+    .transition()
+    .attr("opacity", function(d,i){
+      if (d.collective==(groupis)){
+      return "1";
+      }
+      else {
+      return 0;
+      }
+    })
+    .attr("x", function(d,i){
+      if (d.collective==(groupis)){
+        indexRoot++;
+      }
+      return indexRoot*20;
+      if (d.collective!=(groupis)) {
+        return -10;
+      }
+    })
+  });
+ d3.select('toggleForm').on('click', function(){
+      console.log("toggleFORM")
+      var groupis = "Form";
+      var indexForm = 0;
+    rect
+    .transition()
+    .attr("opacity", function(d,i){
+      if (d.collective==(groupis)){
+      return "1";
+      }
+      else {
+      return 0;
+      }
+    })
+        .attr("x", function(d,i){
+      if (d.collective==(groupis)){
+        indexForm++;
+      }
+      return indexForm*20;
+      if (d.collective!=(groupis)) {
+        return -10;
+      }
+    })
+  });
+ d3.select('toggleGlobal').on('click', function(){
+      console.log("toggleGLOBAL")
+      var groupis = "Global";
+      var indexGlobal = 0;
+    rect
+    .transition()
+    .attr("opacity", function(d,i){
+      if (d.collective==(groupis)){
+      return "1";
+      }
+      else {
+      return 0;
+      }
+    })
+    .attr("x", function(d,i){
+      if (d.collective==(groupis)){
+        indexGlobal++;
+      }
+      return indexGlobal*20;
+      if (d.collective!=(groupis)) {
+        return -10;
+      }
+    })
+  });
 
+  d3.select('toggleTimeline').on('click', function(){
+    rect
+    .transition()
+   .attr("x", function(d,i){
+    return alongWidth(i);
+    }) 
+  .attr("opacity", .8);
+})
 
-// rect.on('click', function(d,i){
-//       console.log(d.collective);
-//       rect
-//       .transition()
-//       .attr("opacity", function(d,i){
-//       if (rect.attr("opacity")==1){
-//         return 1;
-//       }
-//       else {
-//         return 1;
-//       }
-//       })
-//     })
-
-
-
-
-
-
-
-
-
-
-    //   var againis = d.collective;
-    //     rect
-    //     .transition()
-    //     .attr("opacity", function(d,i){
-    //        if (againis == groupis){
-    //       return 1;
-    //       }
-    //   })
-    //           .ease("elastic", 10, .3);
-    // });
+rect.on('click', function(d,i){
+  console.log("callout");
+  console.log(d.collective);
+  var groupis = d.collective;
+  rect
+  .transition()
+  .attr("opacity", function(d,i){
+    if (d.collective==(groupis)){
+      return ".6";
+    }
+    else {
+      return 0;
+    }
+  })
+   .ease("elastic", 10, .3);
+});
 }
 
 
 
 var svg = d3.select("#small_multiples").append("svg")
-    // .attr("width", width)
-    // .attr("height", height);
-         .attr({
+    .attr({
         "width": "100%",
         "height": "100%"
       })
     .attr("viewBox", "0 0 " + width + " " + height )
     .attr("preserveAspectRatio", "xMinYMin")
-     .attr("pointer-events", "all")
+    .attr("pointer-events", "all")
      ///////////will this work
      .append("g");
 
@@ -274,12 +355,6 @@ force.on("tick", function() {
     });
 });
 
-  // var node = svg.selectAll(".node")
-  //   .data(graph.nodes)
-  //   .enter().append("svg:g")
-  //   .attr("class", "node")
-  //   .call(force.drag);
-
 function redraw() {
   node.attr("transform",
       "translate(" + d3.event.translate + ")"
@@ -301,8 +376,8 @@ function redraw() {
         return hackC;
       } else if(d.collective == 'Drive') {
         return driveC;
-      } else {
-        return "#cccccc";
+      } else if (d.collective == 'Global'){
+        return global;
       }
     })
     .attr("opacity",".3")
@@ -314,14 +389,6 @@ function redraw() {
     d3.select(this)
     .attr("stroke", "white")
     });
-// .on('click', function(d,i){
-//   highlight()
-//   // .transition()
-//   d3.selectAll('circle')
-//   .attr("fill", "white");
-// });
-
-
 
 function zoom() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -353,29 +420,6 @@ var a=0;
       $("#small_multiples").show("slow",function(){
       })
   })
-
-//not node.on
-// sortToggle.on('click', function(d,i) {
-//   console.log("sectiontoggleOn")
-//   if (b===0){
-//     //call the section names up
-//     highlight();
-//     //show them slowly
-//         $("#clicked").show("slow",function(){
-//         })
-//       $("#small_multiples").hide("slow",function(){
-//       })
-//     }
-//   else if (b===1){
-//     //if you click the section toggle button go back to the original visual
-//      goBack();
-//     //and hide the section spread
-//     $("#small_multiples").show("slow",function(){
-//       })
-//       $("#clicked").hide("slow",function(){
-//       })
-//     }
-// });
 function goBack(){
   b=0;
 }
@@ -424,41 +468,7 @@ function goBack(){
 
 
 
-// function callout(groupis){
-//   console.log("callout");
-//   console.log(groupis);
-//   // node
-// rect
-// // .attr("opacity", "1")
-//   .transition()
-//   .attr("opacity", function(d,i){
-//     if (d.collective==(groupis)){
-//       return "1";
-//     }
-//     else {
-//       return 0;
-//     }
-//   })
-//       .ease("elastic", 10, .3);
-// }
 
-//   .attr("width", function(d,i){
-//    if(d.collective===groupis){
-//     return 10;
-//   } else { 
-//     return 0;
-//   }
-// })
-  // .attr("height", function(d,i){ 
-  //   // var word = (d3.values(d.word_count).join(""))
-  //   // var wordis = parseInt(word)
-  //      if(d.collective==(groupis)){
-  //   return heightScale(d.score);
-  // }
-  // else {
-  //   return 0;
-  // }
-  //   })
 
 
 
@@ -466,4 +476,3 @@ function goBack(){
 
 
 });
-

@@ -107,17 +107,6 @@ search {
 	margin: 0;
 }
 
-tags {
-	position: fixed;
-	/*right:5px;*/
-	/*margin: 0;*/
-	/*padding: 0;*/
-	/*height: 10px;*/
-	/*display: table-cell;*/
-	/*width: 1000px;*/
-	/*text-align: left;*/
-	/*left: 800;*/
-}
 
 account {
 	padding: 0;
@@ -128,37 +117,89 @@ account {
 	z-index: 1000;
 }
 
+#click{
+		padding-bottom: 20px;
+}
+
 toggleButtons {
+	margin: auto;
 	height: 10px;
 	width: 100%;
 	position: relative;
-	padding: 0px;
-	margin: 0px;
+	padding-bottom: 20px;
 }
 
-	toggleGraph {
+	toggleTimeline {
 		margin: 0;
-		padding: 0px 20px 0 40px;
-		display: table-cell;
+		padding: 0px 10px 0 10px;
+		/*display: table-cell;*/
 		text-align: right;
 		cursor: pointer; /*changed this -annelie*/
 	}
-		toggleGraph:hover {
+		toggleTimeline:hover {
 			opacity: 0.5;
 		}
 
-	toggleSketch {
+	toggleCluster {
 		margin: 0;
-		padding: 0px 10px 0 30px;
-		display: table-cell;
+		padding: 0px 10px 0 10px;
+		/*display: table-cell;*/
 		text-align: left;
 	    cursor: pointer; /*changed this -annelie*/
 	}
 
-		toggleSketch:hover {
+		toggleCluster:hover {
 			opacity: 0.5;
-			padding-top: 15px;
+			/*padding-top: 1px;*/
 		}
+
+
+
+
+
+
+
+
+#filter{
+	padding-bottom: 30px;
+}
+tags {
+    cursor: pointer;
+	margin: auto;
+	height: 10px;
+	width: 100%;
+	position: relative;
+	padding-top:5px;
+	padding-bottom:20px;
+/*	padding: 20px 0px 20 0px;
+*/}
+		toggleDrive:hover {
+			opacity: 0.5;
+		}
+		toggleHack:hover {
+			opacity: 0.5;
+		}
+		toggleRoot:hover {
+			opacity: 0.5;
+		}
+		toggleIgnite:hover {
+			opacity: 0.5;
+		}
+		toggleForm:hover {
+			opacity: 0.5;
+		}
+		toggleGlobal:hover {
+			opacity: 0.5;
+		}
+
+
+
+
+
+
+
+
+
 
 
 key {
