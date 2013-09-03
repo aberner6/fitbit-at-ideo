@@ -55,6 +55,14 @@ var alongWidth = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
   .range([10, width-10]);
 
+var centerWidth = d3.scale.linear()
+  .domain([0, maxResponse/3]) //gotta be total people
+  .range([width/3, width*2/3]);
+
+var centerHeight = d3.scale.linear()
+  .domain([0, maxResponse/3]) //gotta be total people
+  .range([0, height/2]);
+
 var alongHeight = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
   .range([10, 100]);
@@ -90,7 +98,7 @@ return 0;
     })     
   .attr("width", function(d,i){
     if (d.score>0){
-      return 8;
+      return 15;
     }
   else {
     return 0;
@@ -144,23 +152,39 @@ return 0;
     var indexDrive = 0;
     rect
     .transition()
-    .attr("opacity", function(d,i){
-      if (d.collective==(groupis)){
-        return "1";
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("x", function(d,i){
-      if (d.collective==(groupis)){
+    // .attr("opacity", function(d,i){
+    //   if (d.collective==(groupis)){
+    //     return "1";
+    //   }
+    //   else {
+    //     return 0;
+    //   }
+    // })
+      .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
         indexDrive++;
       }
-      return indexDrive*20;
-      if (d.collective!=(groupis)) {
+      return centerHeight(indexDrive);
+      // return centerWidth(indexDrive)+100;
+    }
+          else {
         return -10;
       }
     })
+          .attr("x", width/3)
+.attr("height", function(d,i){
+    if (d.score>0){
+      return 15;
+    }
+  else {
+    return 0;
+  }
+})
+  .attr("width", function(d,i){ 
+ return toggleScale(d.score);
+    })
+
+
   });
   d3.select('toggleHack').on('click', function(){
     console.log("toggleHACK")
@@ -177,11 +201,12 @@ return 0;
       }
     })
     .attr("x", function(d,i){
-      if (d.collective==(groupis)){
+      if (d.collective==(groupis)){{
         indexHack++;
       }
       return indexHack*20;
-      if (d.collective!=(groupis)) {
+    }
+          else {
         return -10;
       }
     })
@@ -201,11 +226,12 @@ return 0;
     }
   })
       .attr("x", function(d,i){
-      if (d.collective==(groupis)){
+      if (d.collective==(groupis)){{
         indexIgnite++;
       }
       return indexIgnite*20;
-      if (d.collective!=(groupis)) {
+      }
+      else {        
         return -10;
       }
     })
@@ -225,11 +251,12 @@ return 0;
       }
     })
     .attr("x", function(d,i){
-      if (d.collective==(groupis)){
+      if (d.collective==(groupis)){{
         indexRoot++;
       }
       return indexRoot*20;
-      if (d.collective!=(groupis)) {
+    }
+    else {
         return -10;
       }
     })
@@ -249,11 +276,11 @@ return 0;
       }
     })
         .attr("x", function(d,i){
-      if (d.collective==(groupis)){
+      if (d.collective==(groupis)){{
         indexForm++;
       }
       return indexForm*20;
-      if (d.collective!=(groupis)) {
+    } else {
         return -10;
       }
     })
@@ -273,11 +300,11 @@ return 0;
       }
     })
     .attr("x", function(d,i){
-      if (d.collective==(groupis)){
+      if (d.collective==(groupis)){{
         indexGlobal++;
       }
       return indexGlobal*20;
-      if (d.collective!=(groupis)) {
+    } else {
         return -10;
       }
     })
