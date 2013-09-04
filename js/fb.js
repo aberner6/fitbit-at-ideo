@@ -13,8 +13,7 @@ var margin = width/2;
 var wscale = height/5;
 var scale = height/5;
 var hescale = height/150;
-// var x1 = scale*2;
-// var y1 = h/2; 
+
 var narrow = 1.5; //normal rect width
 var thick = 4; //thickness for highlighting, mouseovers
 var lmargin = 15; //left margin
@@ -53,7 +52,7 @@ var toggleScale = d3.scale.linear()
 
 var alongWidth = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
-  .range([10, width-10]);
+  .range([width/2-maxResponse*8, width/2+maxResponse*8]);
 
 var centerWidth = d3.scale.linear()
   .domain([0, maxResponse/3]) //gotta be total people
@@ -63,27 +62,34 @@ var centerHeight = d3.scale.linear()
   .domain([0, maxResponse/3]) //gotta be total people
   .range([0, height/2]);
 
-var alongHeight = d3.scale.linear()
-  .domain([0, maxResponse]) //gotta be total people
-  .range([10, 100]);
-
 var force = d3.layout.force()
     .charge(-1000)
     .linkDistance(200)
     .gravity(.2)
     .size([width, height]);
 
-
 var sectionview = d3.select("#clicked").append("svg")
 .attr("width", width)
 .attr("height", height)
 
+var svg = d3.select("#small_multiples").append("svg")
+  .attr({
+    "width": "100%",
+    "height": "100%"
+  })
+  .attr("viewBox", "0 0 " + width + " " + height )
+  .attr("preserveAspectRatio", "xMinYMin")
+  .attr("pointer-events", "all")
+  .append("g");
 
+var node = svg.selectAll(".node")
+  .data(graph.nodes)
+  .enter().append("svg:g")
+  .attr("class", "node");
+  // .call(force.drag);
 
 var rect = sectionview.selectAll("rect")
 function highlight(){
-  b = 1; //for toggle
-
   var rect = sectionview.selectAll("rect")
   .data(function(d){ 
     return graph.nodes;
@@ -123,15 +129,7 @@ return 0;
       } else if (d.collective == 'Global'){
         return global;
       }
-    })
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    .attr("stroke","gray")
-    })
-    .on('mouseout', function(d,i){
-    d3.select(this)
-    .attr("stroke", "white")
-    })
+    });
 
   $('rect').tipsy({ 
         gravity: 'nw', 
@@ -144,7 +142,6 @@ return 0;
         }
       });
       var groupis;
-      console.log(b);
 
   d3.select('toggleDrive').on('click', function(){
     console.log("toggleDRIVE")
@@ -152,39 +149,28 @@ return 0;
     var indexDrive = 0;
     rect
     .transition()
-    // .attr("opacity", function(d,i){
-    //   if (d.collective==(groupis)){
-    //     return "1";
-    //   }
-    //   else {
-    //     return 0;
-    //   }
-    // })
-      .attr("y", function(d,i){
+    .attr("y", function(d,i){
       if (d.collective==(groupis)){{
         indexDrive++;
       }
-      return centerHeight(indexDrive);
-      // return centerWidth(indexDrive)+100;
+        return centerHeight(indexDrive);
     }
-          else {
+      else {
         return -10;
       }
     })
-          .attr("x", width/3)
-.attr("height", function(d,i){
-    if (d.score>0){
-      return 15;
-    }
-  else {
-    return 0;
-  }
-})
-  .attr("width", function(d,i){ 
- return toggleScale(d.score);
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
     })
-
-
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
   });
   d3.select('toggleHack').on('click', function(){
     console.log("toggleHACK")
@@ -192,23 +178,27 @@ return 0;
         var indexHack= 0;
     rect
     .transition()
-    .attr("opacity", function(d,i){
-      if (d.collective==(groupis)){
-        return "1";
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexHack++;
+      }
+        return centerHeight(indexHack);
+      }
+      else {
+        return -10;
+      }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
       }
       else {
         return 0;
       }
     })
-    .attr("x", function(d,i){
-      if (d.collective==(groupis)){{
-        indexHack++;
-      }
-      return indexHack*20;
-    }
-          else {
-        return -10;
-      }
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
     })
   });
   d3.select('toggleIgnite').on('click', function(){
@@ -217,48 +207,56 @@ return 0;
       var indexIgnite = 0;
   rect
   .transition()
-  .attr("opacity", function(d,i){
-    if (d.collective==(groupis)){
-      return "1";
-    }
-    else {
-      return 0;
-    }
-  })
-      .attr("x", function(d,i){
-      if (d.collective==(groupis)){{
-        indexIgnite++;
+  .attr("y", function(d,i){
+    if (d.collective==(groupis)){{
+      indexIgnite++;
       }
       return indexIgnite*20;
-      }
-      else {        
+    }
+    else {        
         return -10;
+    }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
       }
     })
-});
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
  d3.select('toggleRoot').on('click', function(){
       console.log("toggleROOT")
       var groupis = "Root";
       var indexRoot = 0;
     rect
     .transition()
-    .attr("opacity", function(d,i){
-      if (d.collective==(groupis)){
-      return "1";
-      }
-      else {
-      return 0;
-      }
-    })
-    .attr("x", function(d,i){
+    .attr("y", function(d,i){
       if (d.collective==(groupis)){{
         indexRoot++;
       }
-      return indexRoot*20;
+      return centerHeight(indexRoot);
     }
     else {
         return -10;
       }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
     })
   });
  d3.select('toggleForm').on('click', function(){
@@ -267,22 +265,26 @@ return 0;
       var indexForm = 0;
     rect
     .transition()
-    .attr("opacity", function(d,i){
-      if (d.collective==(groupis)){
-      return "1";
-      }
-      else {
-      return 0;
-      }
-    })
-        .attr("x", function(d,i){
+    .attr("y", function(d,i){
       if (d.collective==(groupis)){{
         indexForm++;
       }
-      return indexForm*20;
+      return centerHeight(indexForm);
     } else {
         return -10;
       }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
     })
   });
  d3.select('toggleGlobal').on('click', function(){
@@ -291,84 +293,62 @@ return 0;
       var indexGlobal = 0;
     rect
     .transition()
-    .attr("opacity", function(d,i){
-      if (d.collective==(groupis)){
-      return "1";
-      }
-      else {
-      return 0;
-      }
-    })
-    .attr("x", function(d,i){
+    .attr("y", function(d,i){
       if (d.collective==(groupis)){{
         indexGlobal++;
       }
-      return indexGlobal*20;
+      return centerHeight(indexGlobal);
     } else {
         return -10;
       }
     })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
   });
-
   d3.select('toggleTimeline').on('click', function(){
     rect
     .transition()
-   .attr("x", function(d,i){
-    return alongWidth(i);
-    }) 
-  .attr("opacity", .8);
-})
-
-rect.on('click', function(d,i){
-  console.log("callout");
-  console.log(d.collective);
-  var groupis = d.collective;
-  rect
-  .transition()
-  .attr("opacity", function(d,i){
-    if (d.collective==(groupis)){
-      return ".6";
-    }
-    else {
+    .attr("x", function(d,i){
+      return alongWidth(i);
+    })
+    .attr("y", function(d,i){ 
       return 0;
-    }
+    })     
+    .attr("width", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("height", function(d,i){ 
+      return toggleScale(d.score);
+    })
   })
-   .ease("elastic", 10, .3);
-});
 }
 
-
-
-var svg = d3.select("#small_multiples").append("svg")
-    .attr({
-        "width": "100%",
-        "height": "100%"
-      })
-    .attr("viewBox", "0 0 " + width + " " + height )
-    .attr("preserveAspectRatio", "xMinYMin")
-    .attr("pointer-events", "all")
-     ///////////will this work
-     .append("g");
-
-
-
-  var node = svg.selectAll(".node")
-    .data(graph.nodes)
-    .enter().append("svg:g")
-    .attr("class", "node")
-    .call(force.drag);
-
 doNodes();
-
 function doNodes(){
+
 svg
-    .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-.append("g");
+  .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+  .append("g");
 
 force
   .links(graph.links)
-    .nodes(graph.nodes)
-    .start();
+  .nodes(graph.nodes)
+  .start();
 
 force.on("tick", function() {
   link.attr("x1", function(d) { return d.source.x; })
@@ -380,13 +360,14 @@ force.on("tick", function() {
   node.attr("transform", function(d) { 
     return "translate(" + d.x + "," + d.y + ")";
     });
+
 });
 
-function redraw() {
-  node.attr("transform",
-      "translate(" + d3.event.translate + ")"
-      + " scale(" + d3.event.scale + ")");
-}
+// function redraw() {
+//   node.attr("transform",
+//       "translate(" + d3.event.translate + ")"
+//       + " scale(" + d3.event.scale + ")");
+// }
 
   node.append("svg:circle")
     .attr("r", function(d) {
@@ -407,6 +388,9 @@ function redraw() {
         return global;
       }
     })
+      
+      // .call(onDragDrop(dragmove, dropHandler)) //will this work?
+
     .attr("opacity",".3")
     .on('mouseover', function(d,i){
     d3.select(this)
@@ -417,17 +401,52 @@ function redraw() {
     .attr("stroke", "white")
     });
 
+  node.append("svg:text")
+    .attr("class", "label")
+    .attr("dx", 0)
+    .attr("dy", function(d) {
+      return (d.score/scoreMult)  + 20;
+    })
+    .text(function(d) {
+      return d.name;
+    });
+  var link = svg.selectAll(".link")
+    .data(graph.links)
+    .enter().append("line")
+    .attr("class", function(d) {
+      if(d.type == 'visible') {
+        return "vislink";
+      } 
+      else {
+        return "invislink";
+      }
+      })
+    .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+    .on('mouseover', function(d,i){
+      d3.select(this)
+      .attr("stroke","black")
+    })
+    .on('mouseout', function(d,i){
+      d3.select(this)
+      .attr("stroke", "gray")
+    });
+
+     $('circle').tipsy({ 
+        gravity: 'nw', 
+        html: true, 
+        //fade: true,
+        title: function() {
+          var d = this.__data__;
+          // return d.score+" ("+d.section+")";
+          var intit = parseInt(d.score);
+          return (intit)+" pts";
+        }
+      });
+
 function zoom() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 }
-
-
-
-
-
-var b=0;
-var a=0;
 
 
   d3.select('toggleTimeline').on('click', function(){
@@ -447,59 +466,5 @@ var a=0;
       $("#small_multiples").show("slow",function(){
       })
   })
-function goBack(){
-  b=0;
-}
-//special jquery library for a nice mouseover headline / title per rectangle
- $('circle').tipsy({ 
-        gravity: 'nw', 
-        html: true, 
-        //fade: true,
-        title: function() {
-          var d = this.__data__;
-          // return d.score+" ("+d.section+")";
-          var intit = parseInt(d.score);
-          return (intit)+" pts";
-        }
-      });
-
-  node.append("svg:text")
-    .attr("class", "label")
-    .attr("dx", 0)
-    .attr("dy", function(d) {
-      return (d.score/scoreMult)  + 20;
-    })
-    .text(function(d) {
-      return d.name;
-    });
-  var link = svg.selectAll(".link")
-      .data(graph.links)
-    .enter().append("line")
-      .attr("class", function(d) {
-        if(d.type == 'visible') {
-          return "vislink";
-        } else {
-          return "invislink";
-        }
-      })
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-       .on('mouseover', function(d,i){
-    d3.select(this)
-    .attr("stroke","black")
-    })
-    .on('mouseout', function(d,i){
-    d3.select(this)
-    .attr("stroke", "gray")
-    });
-
-
-
-
-
-
-
-
-
-
 
 });
