@@ -88,256 +88,6 @@ var node = svg.selectAll(".node")
   .attr("class", "node");
   // .call(force.drag);
 
-var rect = sectionview.selectAll("rect")
-function highlight(){
-  var rect = sectionview.selectAll("rect")
-  .data(function(d){ 
-    return graph.nodes;
-    console.log(d3.ascending(d.score, d.score));
-  })
-  .enter().append("rect")
-   .attr("x", function(d,i){
-    return alongWidth(i);
-    })
-  .attr("y", function(d,i){ 
-return 0;
-    })     
-  .attr("width", function(d,i){
-    if (d.score>0){
-      return 15;
-    }
-  else {
-    return 0;
-  }
-})
-  .attr("height", function(d,i){ 
- return toggleScale(d.score);
-    })
-  .attr("opacity",".6")
-
- .attr("fill", function(d){
-      if(d.collective == 'Ignite') {
-        return igniteC;
-      } else if(d.collective == 'Root') {
-        return rootC;
-      } else if(d.collective == 'Form') {
-        return formC;
-      } else if(d.collective == 'Hack') {
-        return hackC;
-      } else if(d.collective == 'Drive') {
-        return driveC;
-      } else if (d.collective == 'Global'){
-        return global;
-      }
-    });
-
-  $('rect').tipsy({ 
-        gravity: 'nw', 
-        html: true, 
-        //fade: true,
-        title: function() {
-          var d = this.__data__;
-          var intit = parseInt(d.score);
-          return d.name+" - "+(intit)+" pts";
-        }
-      });
-      var groupis;
-
-  d3.select('toggleDrive').on('click', function(){
-    console.log("toggleDRIVE")
-    var groupis = "Drive";
-    var indexDrive = 0;
-    rect
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexDrive++;
-      }
-        return centerHeight(indexDrive);
-    }
-      else {
-        return -10;
-      }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
-  d3.select('toggleHack').on('click', function(){
-    console.log("toggleHACK")
-    var groupis = "Hack";
-        var indexHack= 0;
-    rect
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexHack++;
-      }
-        return centerHeight(indexHack);
-      }
-      else {
-        return -10;
-      }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
-  d3.select('toggleIgnite').on('click', function(){
-      console.log("toggleIGNITE")
-      var groupis = "Ignite";
-      var indexIgnite = 0;
-  rect
-  .transition()
-  .attr("y", function(d,i){
-    if (d.collective==(groupis)){{
-      indexIgnite++;
-      }
-      return indexIgnite*20;
-    }
-    else {        
-        return -10;
-    }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
- d3.select('toggleRoot').on('click', function(){
-      console.log("toggleROOT")
-      var groupis = "Root";
-      var indexRoot = 0;
-    rect
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexRoot++;
-      }
-      return centerHeight(indexRoot);
-    }
-    else {
-        return -10;
-      }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
- d3.select('toggleForm').on('click', function(){
-      console.log("toggleFORM")
-      var groupis = "Form";
-      var indexForm = 0;
-    rect
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexForm++;
-      }
-      return centerHeight(indexForm);
-    } else {
-        return -10;
-      }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
- d3.select('toggleGlobal').on('click', function(){
-      console.log("toggleGLOBAL")
-      var groupis = "Global";
-      var indexGlobal = 0;
-    rect
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexGlobal++;
-      }
-      return centerHeight(indexGlobal);
-    } else {
-        return -10;
-      }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
-  d3.select('toggleTimeline').on('click', function(){
-    rect
-    .transition()
-    .attr("x", function(d,i){
-      return alongWidth(i);
-    })
-    .attr("y", function(d,i){ 
-      return 0;
-    })     
-    .attr("width", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("height", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  })
-}
-
 doNodes();
 function doNodes(){
 
@@ -363,11 +113,11 @@ force.on("tick", function() {
 
 });
 
-// function redraw() {
-//   node.attr("transform",
-//       "translate(" + d3.event.translate + ")"
-//       + " scale(" + d3.event.scale + ")");
-// }
+function redraw() {
+  node.attr("transform",
+      "translate(" + d3.event.translate + ")"
+      + " scale(" + d3.event.scale + ")");
+}
 
   node.append("svg:circle")
     .attr("r", function(d) {
@@ -448,18 +198,295 @@ function zoom() {
 }
 }
 
+var back=0;
+var rect = sectionview.selectAll("rect")
+function highlight(){
+  // back=0;
+  var rect = sectionview.selectAll("rect")
+  .data(function(d){ 
+    return graph.nodes;
+    console.log(d3.ascending(d.score, d.score));
+  })
+  .enter().append("rect")
+   .attr("x", function(d,i){
+    return alongWidth(i);
+    })
+  .attr("y", function(d,i){ 
+return 0;
+    })     
+  .attr("width", function(d,i){
+    if (d.score>0){
+      return 15;
+    }
+  else {
+    return 0;
+  }
+  })
+ //    .attr("height", function(d,i){ 
+ // return toggleScale(d.score);
+ //    })
+  .attr("height",5)
+  .attr("opacity",".6")
+  .attr("fill", function(d){
+      if(d.collective == 'Ignite') {
+        return igniteC;
+      } else if(d.collective == 'Root') {
+        return rootC;
+      } else if(d.collective == 'Form') {
+        return formC;
+      } else if(d.collective == 'Hack') {
+        return hackC;
+      } else if(d.collective == 'Drive') {
+        return driveC;
+      } else if (d.collective == 'Global'){
+        return global;
+      }
+    })
+    rect
+    .transition()
+    .duration(700)
+    .attr("height", function(d,i){ 
+ return toggleScale(d.score);
+    });
+
+
+  $('rect').tipsy({ 
+        gravity: 'nw', 
+        html: true, 
+        //fade: true,
+        title: function() {
+          var d = this.__data__;
+          var intit = parseInt(d.score);
+          return d.name+" - "+(intit)+" pts";
+        }
+      });
+      var groupis;
+
+  d3.select('toggleDrive').on('click', function(){
+      // back=1;
+    console.log("toggleDRIVE")
+    var groupis = "Drive";
+    var indexDrive = 0;
+    rect
+    .transition()
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexDrive++;
+      }
+        return centerHeight(indexDrive);
+    }
+      else {
+        return -10;
+      }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
+  d3.select('toggleHack').on('click', function(){
+      // back=1;
+    console.log("toggleHACK")
+    var groupis = "Hack";
+        var indexHack= 0;
+    rect
+    .transition()
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexHack++;
+      }
+        return centerHeight(indexHack);
+      }
+      else {
+        return -10;
+      }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
+  d3.select('toggleIgnite').on('click', function(){
+      // back=1;
+      console.log("toggleIGNITE")
+      var groupis = "Ignite";
+      var indexIgnite = 0;
+  rect
+  .transition()
+  .attr("y", function(d,i){
+    if (d.collective==(groupis)){{
+      indexIgnite++;
+      }
+      return indexIgnite*20;
+    }
+    else {        
+        return -10;
+    }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
+ d3.select('toggleRoot').on('click', function(){
+    // back=1;
+      console.log("toggleROOT")
+      var groupis = "Root";
+      var indexRoot = 0;
+    rect
+    .transition()
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexRoot++;
+      }
+      return centerHeight(indexRoot);
+    }
+    else {
+        return -10;
+      }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
+ d3.select('toggleForm').on('click', function(){
+    // back=1;
+      console.log("toggleFORM")
+      var groupis = "Form";
+      var indexForm = 0;
+    rect
+    .transition()
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexForm++;
+      }
+      return centerHeight(indexForm);
+    } else {
+        return -10;
+      }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
+ d3.select('toggleGlobal').on('click', function(){
+  // back=1;
+    console.log("toggleGLOBAL")
+    var groupis = "Global";
+    var indexGlobal = 0;
+    rect
+    .transition()   
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexGlobal++;
+      }
+      return centerHeight(indexGlobal);
+    } else {
+        return -10;
+      }
+    })
+    .attr("x", width/3)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  });
+ d3.select('toggleTimeline').on('click', function(){
+  // if (back==1){
+      console.log("alltoggletimeline")
+
+    rect
+    .transition()
+    .duration(500)
+    // .ease([.1,.2])
+    .attr("x", function(d,i){
+      return alongWidth(i);
+    })
+    .attr("y", function(d,i){ 
+      return 0;
+    })     
+    .attr("width", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("height", function(d,i){ 
+      return toggleScale(d.score);
+    })
+  // }
+  });
+}
+
+
 
   d3.select('toggleTimeline').on('click', function(){
       console.log("toggleTimelineOn")
+      // console.log(back)
+      back=1;
       highlight();
       $("#small_multiples").hide("slow",function(){
       })
       $("#clicked").show("slow",function(){
+      // highlight();
       })
   })
   d3.select('toggleCluster').on('click', function(){
       console.log("toggleClusterOn")
-      doNodes();
+      // doNodes();
+      force.start();
+      back=0;
       //show them slowly
       $("#clicked").hide("slow",function(){
       })
