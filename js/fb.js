@@ -290,10 +290,10 @@ return 0;
   // });
 }
 
-function toggle(tagis){
+function toggle(groupis){
   graphView.selectAll("rect")
     .attr("opacity", function(d,i){
-      if (d.collective==tagis){
+      if (d.collective==groupis){
         return ".6";
       }
       else {
@@ -313,188 +313,57 @@ function toggleBack(){
 //    .attr("opacity", ".6");
 // }
 var xAligned = width/2-110;
+function switchView(groupis){
+  back=1;
+  var index = 0;
+  graphView.selectAll("rect")
+    .transition()
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        index++;
+      }
+        return centerHeight(index);
+      }
+      else {
+        return -10;
+      }
+    })
+    .attr("x", xAligned)
+    .attr("height", function(d,i){
+      if (d.score>0){
+        return 15;
+      }
+      else {
+        return 0;
+      }
+    })
+    .attr("width", function(d,i){ 
+      return toggleScale(d.score);
+    })
+}
 d3.select('toggleHack').on('click', function(){
-    back=1;
-    console.log("toggleHACK")
-    var groupis = "Hack";
-        var indexHack= 0;
-  graphView.selectAll("rect")
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexHack++;
-      }
-        return centerHeight(indexHack);
-      }
-      else {
-        return -10;
-      }
-    })
-    .attr("x", xAligned)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
-d3.select('toggleIgnite').on('click', function(){
-  back=1;
-      console.log("toggleIGNITE")
-      var groupis = "Ignite";
-      var indexIgnite = 0;
-  graphView.selectAll("rect")
-  .transition()
-  .attr("y", function(d,i){
-    if (d.collective==(groupis)){{
-      indexIgnite++;
-      }
-      return indexIgnite*20;
-    }
-    else {        
-        return -10;
-    }
-    })
-    .attr("x", xAligned)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
- d3.select('toggleRoot').on('click', function(){
-    back=1;
-      console.log("toggleROOT")
-      var groupis = "Root";
-      var indexRoot = 0;
-  graphView.selectAll("rect")
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexRoot++;
-      }
-      return centerHeight(indexRoot);
-    }
-    else {
-        return -10;
-      }
-    })
-    .attr("x", xAligned)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
-
- d3.select('toggleForm').on('click', function(){
-  back=1;
-      console.log("toggleFORM")
-      var groupis = "Form";
-      var indexForm = 0;
-  graphView.selectAll("rect")
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexForm++;
-      }
-      return centerHeight(indexForm);
-    } else {
-        return -10;
-      }
-    })
-    .attr("x", xAligned)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
- d3.select('toggleGlobal').on('click', function(){
-  back=1;
-    console.log("toggleGLOBAL")
-    var groupis = "Global";
-    var indexGlobal = 0;
-  graphView.selectAll("rect")
-    .transition()   
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexGlobal++;
-      }
-      return centerHeight(indexGlobal);
-    } else {
-        return -10;
-      }
-    })
-    .attr("x", xAligned)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
-  });
-
-d3.select('toggleDrive').on('click', function(){
-  back=1;
-  console.log("toggleDRIVE")
-  var groupis = "Drive";
-  var indexDrive = 0;
-
-  graphView.selectAll("rect")
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexDrive++;
-      }
-        return centerHeight(indexDrive);
-    }
-      else {
-        return -10;
-      }
-    })
-    .attr("x", xAligned)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
+  switchView("Hack")
 });
 
+d3.select('toggleIgnite').on('click', function(){
+  switchView("Ignite")
+});
+
+d3.select('toggleRoot').on('click', function(){
+  switchView("Root")
+});
+ 
+d3.select('toggleForm').on('click', function(){
+  switchView("Form")
+});
+ 
+d3.select('toggleGlobal').on('click', function(){
+  switchView("Global")
+});
+
+d3.select('toggleDrive').on('click', function(){
+  switchView("Drive")
+});
 
 function goBack(){
   back=0;
