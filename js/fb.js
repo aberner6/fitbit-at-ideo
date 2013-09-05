@@ -85,17 +85,17 @@ var networkView = d3.select("#network").append("svg")
   .attr("pointer-events", "all")
   .append("g");
 
-var node = networkView.selectAll(".node")
-  .data(graph.nodes)
-  .enter().append("svg:g")
-  .attr("class", "node");
-  // .call(force.drag);
+// var node = networkView.selectAll(".node")
+//   .data(graph.nodes)
+//   .enter().append("svg:g")
+//   .attr("class", "node")
+//   .call(force.drag);
 
 doNodes();
 function doNodes(){
 
 networkView
-  .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+  // .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
   .append("g");
 
 force
@@ -103,66 +103,6 @@ force
   .nodes(graph.nodes)
   .start();
 
-force.on("tick", function() {
-  link.attr("x1", function(d) { return d.source.x; })
-    .attr("y1", function(d) { return d.source.y; })
-    .attr("x2", function(d) { return d.target.x; })
-    .attr("y2", function(d) { return d.target.y; });
-
-
-  node.attr("transform", function(d) { 
-    return "translate(" + d.x + "," + d.y + ")";
-    });
-
-});
-
-function redraw() {
-  node.attr("transform",
-      "translate(" + d3.event.translate + ")"
-      + " scale(" + d3.event.scale + ")");
-}
-
-  node.append("svg:circle")
-    .attr("r", function(d) {
-   return heightScale(d.score);
-    })
-    .attr("fill", function(d){
-      if(d.collective == 'Ignite') {
-        return igniteC;
-      } else if(d.collective == 'Root') {
-        return rootC;
-      } else if(d.collective == 'Form') {
-        return formC;
-      } else if(d.collective == 'Hack') {
-        return hackC;
-      } else if(d.collective == 'Drive') {
-        return driveC;
-      } else if (d.collective == 'Global'){
-        return global;
-      }
-    })
-      
-      // .call(onDragDrop(dragmove, dropHandler)) //will this work?
-
-    .attr("opacity",".3")
-    .on('mouseover', function(d,i){
-    d3.select(this)
-    .attr("stroke","gray")
-    })
-    .on('mouseout', function(d,i){
-    d3.select(this)
-    .attr("stroke", "white")
-    });
-
-  node.append("svg:text")
-    .attr("class", "label")
-    .attr("dx", 0)
-    .attr("dy", function(d) {
-      return (d.score/scoreMult)  + 20;
-    })
-    .text(function(d) {
-      return d.name;
-    });
   var link = networkView.selectAll(".link")
     .data(graph.links)
     .enter().append("line")
@@ -183,6 +123,94 @@ function redraw() {
       d3.select(this)
       .attr("stroke", "gray")
     });
+////////////////////////////////////////////////////////
+    var node_drag = d3.behavior.drag()
+        .on("dragstart", dragstart)
+        .on("drag", dragmove)
+        .on("dragend", dragend);
+
+    function dragstart(d, i) {
+        force.stop() // stops the force auto positioning before you start dragging
+    }
+
+    function dragmove(d, i) {
+        d.px += d3.event.dx;
+        d.py += d3.event.dy;
+        d.x += d3.event.dx;
+        d.y += d3.event.dy; 
+        tick(); // this is the key to make it work together with updating both px,py,x,y on d !
+    }
+
+    function dragend(d, i) {
+        d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+        tick();
+        force.resume();
+    }
+var node = networkView.selectAll("g.node")
+  .data(graph.nodes)
+  .enter().append("svg:g")
+  .attr("class", "node")
+  .call(node_drag);
+
+  node.append("svg:circle")
+    .attr("r", function(d) {
+   return heightScale(d.score);
+    })
+    .attr("fill", function(d){
+      if(d.collective == 'Ignite') {
+        return igniteC;
+      } else if(d.collective == 'Root') {
+        return rootC;
+      } else if(d.collective == 'Form') {
+        return formC;
+      } else if(d.collective == 'Hack') {
+        return hackC;
+      } else if(d.collective == 'Drive') {
+        return driveC;
+      } else if (d.collective == 'Global'){
+        return global;
+      }
+    })
+    .attr("opacity",".3")
+    .on('mouseover', function(d,i){
+    d3.select(this)
+    .attr("stroke","gray")
+    })
+    .on('mouseout', function(d,i){
+    d3.select(this)
+    .attr("stroke", "white")
+    });
+  node.append("svg:text")
+    .attr("class", "label")
+    .attr("dx", 0)
+    .attr("dy", function(d) {
+      return (d.score/scoreMult)  + 20;
+    })
+    .text(function(d) {
+      return d.name;
+    });
+
+  force.on("tick", tick);
+function tick(){
+// force.on("tick", function() {
+  link.attr("x1", function(d) { return d.source.x; })
+    .attr("y1", function(d) { return d.source.y; })
+    .attr("x2", function(d) { return d.target.x; })
+    .attr("y2", function(d) { return d.target.y; });
+
+
+  node.attr("transform", function(d) { 
+    return "translate(" + d.x + "," + d.y + ")";
+    });
+};
+
+// });
+
+function redraw() {
+  node.attr("transform",
+      "translate(" + d3.event.translate + ")"
+      + " scale(" + d3.event.scale + ")");
+}
 
      $('circle').tipsy({ 
         gravity: 'nw', 
@@ -340,7 +368,7 @@ function toggleBack(){
   .attr("opacity", ".6");
 }
 
-var xAligned = width/2-110;
+var xAligned = width/2-150;
 function switchView(groupis){
   back=1;
   var index = 0;
