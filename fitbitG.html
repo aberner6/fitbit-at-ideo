@@ -65,6 +65,8 @@ svg {display: block; width: 100%; margin: 40;}
 </style>
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script> 
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
+<script type="text/javascript" src="js/jquery.hoverIntent.js"></script>
+
 <link href="css/style.css" rel="stylesheet" type="text/css" /> 
 <link href="css/tipsy.css" rel="stylesheet" type="text/css" /> 
 <script src="https://dl.dropboxusercontent.com/u/97059/fitbit/d3.v3.min.js"></script>
@@ -98,9 +100,13 @@ svg {display: block; width: 100%; margin: 40;}
   <toggleDrive>
         <img src="img/drive.png">
   </toggleDrive>
+  
     <toggleHack>
+        <!-- <div id = "Hack"> -->
         <img src="img/hack.png">
+          <!-- </div> -->
     </toggleHack>
+
     <toggleIgnite>
         <img src="img/ignite.png">
     </toggleIgnite>
@@ -127,8 +133,11 @@ You’ll know a connection has been made every time you see a pair of Fitbiters 
 <br><br>
 </div> -->
 <script type="text/javascript" src="js/fb.js"></script>
-<div id="clicked" style="display:none"></div>
-<div id="small_multiples"></div>
+<center>
+<div id="bars" style="display:none"></div>
+</center>
+<!-- not clicked -->
+<div id="network"></div>
 
 
 </body>

@@ -176,8 +176,8 @@ toggleButtons {
 	padding-bottom: 30px;
 }
 tags {
-    cursor: pointer;
-	margin: auto;
+/*    cursor: pointer;
+*/	margin: auto;
 	height: 10px;
 	width: 100%;
 	position: relative;
@@ -187,21 +187,34 @@ tags {
 */}
 		toggleDrive:hover {
 			opacity: 0.5;
+			    cursor: pointer;
+
 		}
 		toggleHack:hover {
 			opacity: 0.5;
+			    cursor: pointer;
+	padding: 0px 0px 20 0px;
+
 		}
 		toggleRoot:hover {
 			opacity: 0.5;
+			    cursor: pointer;
+
 		}
 		toggleIgnite:hover {
 			opacity: 0.5;
+			    cursor: pointer;
+
 		}
 		toggleForm:hover {
 			opacity: 0.5;
+			    cursor: pointer;
+
 		}
 		toggleGlobal:hover {
 			opacity: 0.5;
+			    cursor: pointer;
+
 		}
 
 
@@ -218,7 +231,7 @@ key {
 	position: fixed;
 	padding-left: 1800;
 	margin: 0;
-	/*padding: 0;*/
+	/*padding: 0;
 	display: block;
 	/*margin-left: -100;*/
 	/*bottom-right: 30px;*/

@@ -33,8 +33,6 @@ global = "#2A329B";
 
 var scoreMult = 3000;
 
-var color = d3.scale.category20();
-
 console.log(graph);
 var maxResponse = d3.max(graph.nodes, function(d,i) { return i;} );
 console.log(maxResponse);
@@ -52,11 +50,8 @@ var toggleScale = d3.scale.linear()
 
 var alongWidth = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
-  .range([width/2-maxResponse*8, width/2+maxResponse*8]);
-
-var centerWidth = d3.scale.linear()
-  .domain([0, maxResponse/3]) //gotta be total people
-  .range([width/3, width*2/3]);
+  // .range([width/2-maxResponse*8, width/2+maxResponse*8]);
+  .range([width/2-maxResponse*4, width/2+maxResponse*6]);
 
 var centerHeight = d3.scale.linear()
   .domain([0, maxResponse/3]) //gotta be total people
@@ -68,11 +63,19 @@ var force = d3.layout.force()
     .gravity(.2)
     .size([width, height]);
 
-var sectionview = d3.select("#clicked").append("svg")
-.attr("width", width)
-.attr("height", height)
+var graphView = d3.select("#bars").append("svg")
+// .attr("width", width)
+// .attr("height", height)
+  .attr({
+    "width": "100%",
+    "height": "100%"
+  })
+  .attr("viewBox", "0 0 " + width + " " + height )
+  .attr("preserveAspectRatio", "xMinYMin")
+  .attr("pointer-events", "all")
+  // .append("g");
 
-var svg = d3.select("#small_multiples").append("svg")
+var networkView = d3.select("#network").append("svg")
   .attr({
     "width": "100%",
     "height": "100%"
@@ -82,7 +85,7 @@ var svg = d3.select("#small_multiples").append("svg")
   .attr("pointer-events", "all")
   .append("g");
 
-var node = svg.selectAll(".node")
+var node = networkView.selectAll(".node")
   .data(graph.nodes)
   .enter().append("svg:g")
   .attr("class", "node");
@@ -91,7 +94,7 @@ var node = svg.selectAll(".node")
 doNodes();
 function doNodes(){
 
-svg
+networkView
   .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
   .append("g");
 
@@ -160,7 +163,7 @@ function redraw() {
     .text(function(d) {
       return d.name;
     });
-  var link = svg.selectAll(".link")
+  var link = networkView.selectAll(".link")
     .data(graph.links)
     .enter().append("line")
     .attr("class", function(d) {
@@ -194,15 +197,15 @@ function redraw() {
       });
 
 function zoom() {
-  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  networkView.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 }
 
 var back=0;
-var rect = sectionview.selectAll("rect")
+var rect = graphView.selectAll("rect")
 function highlight(){
   // back=0;
-  var rect = sectionview.selectAll("rect")
+  var rect = graphView.selectAll("rect")
   .data(function(d){ 
     return graph.nodes;
     console.log(d3.ascending(d.score, d.score));
@@ -222,9 +225,6 @@ return 0;
     return 0;
   }
   })
- //    .attr("height", function(d,i){ 
- // return toggleScale(d.score);
- //    })
   .attr("height",5)
   .attr("opacity",".6")
   .attr("fill", function(d){
@@ -242,13 +242,31 @@ return 0;
         return global;
       }
     })
+
+
+
+    .on('mouseover', function(d,i){
+    d3.select(this)
+    .style("stroke","black")
+    .style("stroke-width","2")
+    // highlight(d);
+  })
+  .on('mouseout', function(d,i){
+    d3.select(this)
+    .style("stroke","none")
+    .style("stroke-width","0")  
+    // rectBack();
+  })
+
+
+
+
     rect
     .transition()
     .duration(700)
     .attr("height", function(d,i){ 
  return toggleScale(d.score);
-    });
-
+    })
 
   $('rect').tipsy({ 
         gravity: 'nw', 
@@ -262,42 +280,94 @@ return 0;
       });
       var groupis;
 
-  d3.select('toggleDrive').on('click', function(){
-      // back=1;
-    console.log("toggleDRIVE")
-    var groupis = "Drive";
-    var indexDrive = 0;
-    rect
-    .transition()
-    .attr("y", function(d,i){
-      if (d.collective==(groupis)){{
-        indexDrive++;
-      }
-        return centerHeight(indexDrive);
-    }
-      else {
-        return -10;
-      }
-    })
-    .attr("x", width/3)
-    .attr("height", function(d,i){
-      if (d.score>0){
-        return 15;
-      }
-      else {
-        return 0;
-      }
-    })
-    .attr("width", function(d,i){ 
-      return toggleScale(d.score);
-    })
+  d3.select('toggleHack')
+  .on('mouseover', function(d,i){
+    d3.select(this)
+    toggle("Hack");
+  })
+  .on('mouseout', function(d,i){
+    toggleBack();
   });
-  d3.select('toggleHack').on('click', function(){
-      // back=1;
+  d3.select('toggleDrive')
+  .on('mouseover', function(d,i){
+    d3.select(this)
+    toggle("Drive");
+  })
+  .on('mouseout', function(d,i){
+    toggleBack();
+  });
+  d3.select('toggleForm')
+  .on('mouseover', function(d,i){
+    d3.select(this)
+    toggle("Form");
+  })
+  .on('mouseout', function(d,i){
+    toggleBack();
+  });
+  d3.select('toggleIgnite')
+  .on('mouseover', function(d,i){
+    d3.select(this)
+    toggle("Ignite");
+  })
+  .on('mouseout', function(d,i){
+    toggleBack();
+  });
+  d3.select('toggleGlobal')
+  .on('mouseover', function(d,i){
+    d3.select(this)
+    toggle("Global");
+  })
+  .on('mouseout', function(d,i){
+    toggleBack();
+  });
+  d3.select('toggleRoot')
+  .on('mouseover', function(d,i){
+    d3.select(this)
+    toggle("Root");
+  })
+  .on('mouseout', function(d,i){
+    toggleBack();
+  });
+}
+
+// function mouseOut(){
+//   setTimeout(function(){
+//     toggleBack();
+//   }, 500)
+// }
+
+// $('toggleHack').hoverIntent({
+//     over: toggle("Hack"),
+//     out: toggleBack(),
+// });
+function toggle(tagis){
+  graphView.selectAll("rect")
+    .attr("opacity", function(d,i){
+      if (d.collective==tagis){
+        return ".6";
+      }
+      else {
+        return ".1";
+      }
+    })
+}
+function toggleBack(){
+  graphView.selectAll("rect")
+  .transition()
+  .delay(1000)
+  // .duration(200)
+  .attr("opacity", ".6");
+}
+// if (back==1){
+//    graphView.selectAll("rect")
+//    .attr("opacity", ".6");
+// }
+d3.select('toggleHack').on('click', function(){
+    back=1;
     console.log("toggleHACK")
     var groupis = "Hack";
         var indexHack= 0;
-    rect
+  graphView.selectAll("rect")
     .transition()
     .attr("y", function(d,i){
       if (d.collective==(groupis)){{
@@ -309,7 +379,7 @@ return 0;
         return -10;
       }
     })
-    .attr("x", width/3)
+    .attr("x", width/2-150)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -322,12 +392,12 @@ return 0;
       return toggleScale(d.score);
     })
   });
-  d3.select('toggleIgnite').on('click', function(){
-      // back=1;
+d3.select('toggleIgnite').on('click', function(){
+  back=1;
       console.log("toggleIGNITE")
       var groupis = "Ignite";
       var indexIgnite = 0;
-  rect
+  graphView.selectAll("rect")
   .transition()
   .attr("y", function(d,i){
     if (d.collective==(groupis)){{
@@ -339,7 +409,7 @@ return 0;
         return -10;
     }
     })
-    .attr("x", width/3)
+    .attr("x", width/2-150)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -353,11 +423,11 @@ return 0;
     })
   });
  d3.select('toggleRoot').on('click', function(){
-    // back=1;
+    back=1;
       console.log("toggleROOT")
       var groupis = "Root";
       var indexRoot = 0;
-    rect
+  graphView.selectAll("rect")
     .transition()
     .attr("y", function(d,i){
       if (d.collective==(groupis)){{
@@ -369,7 +439,7 @@ return 0;
         return -10;
       }
     })
-    .attr("x", width/3)
+    .attr("x", width/2-150)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -382,12 +452,13 @@ return 0;
       return toggleScale(d.score);
     })
   });
+
  d3.select('toggleForm').on('click', function(){
-    // back=1;
+  back=1;
       console.log("toggleFORM")
       var groupis = "Form";
       var indexForm = 0;
-    rect
+  graphView.selectAll("rect")
     .transition()
     .attr("y", function(d,i){
       if (d.collective==(groupis)){{
@@ -398,7 +469,7 @@ return 0;
         return -10;
       }
     })
-    .attr("x", width/3)
+    .attr("x", width/2-150)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -412,11 +483,11 @@ return 0;
     })
   });
  d3.select('toggleGlobal').on('click', function(){
-  // back=1;
+  back=1;
     console.log("toggleGLOBAL")
     var groupis = "Global";
     var indexGlobal = 0;
-    rect
+  graphView.selectAll("rect")
     .transition()   
     .attr("y", function(d,i){
       if (d.collective==(groupis)){{
@@ -427,7 +498,7 @@ return 0;
         return -10;
       }
     })
-    .attr("x", width/3)
+    .attr("x", width/2-150)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -440,21 +511,27 @@ return 0;
       return toggleScale(d.score);
     })
   });
- d3.select('toggleTimeline').on('click', function(){
-  // if (back==1){
-      console.log("alltoggletimeline")
 
-    rect
+d3.select('toggleDrive').on('click', function(){
+  back=1;
+  console.log("toggleDRIVE")
+  var groupis = "Drive";
+  var indexDrive = 0;
+
+  graphView.selectAll("rect")
     .transition()
-    .duration(500)
-    // .ease([.1,.2])
-    .attr("x", function(d,i){
-      return alongWidth(i);
+    .attr("y", function(d,i){
+      if (d.collective==(groupis)){{
+        indexDrive++;
+      }
+        return centerHeight(indexDrive);
+    }
+      else {
+        return -10;
+      }
     })
-    .attr("y", function(d,i){ 
-      return 0;
-    })     
-    .attr("width", function(d,i){
+    .attr("x", width/2-150)
+    .attr("height", function(d,i){
       if (d.score>0){
         return 15;
       }
@@ -462,23 +539,65 @@ return 0;
         return 0;
       }
     })
-    .attr("height", function(d,i){ 
+    .attr("width", function(d,i){ 
       return toggleScale(d.score);
     })
-  // }
-  });
+});
+
+
+function goBack(){
+  back=0;
+  graphView.selectAll("rect")
+  .transition()
+      .duration(700)
+   .attr("x", function(d,i){
+    return alongWidth(i);
+    })
+  .attr("y", function(d,i){ 
+return 0;
+    })     
+  .attr("width", function(d,i){
+    if (d.score>0){
+      return 15;
+    }
+  else {
+    return 0;
+  }
+  })
+    .attr("height", function(d,i){ 
+ return toggleScale(d.score);
+    })
+  // .attr("height",5)
+  // .attr("opacity",".6")
+  .attr("fill", function(d){
+      if(d.collective == 'Ignite') {
+        return igniteC;
+      } else if(d.collective == 'Root') {
+        return rootC;
+      } else if(d.collective == 'Form') {
+        return formC;
+      } else if(d.collective == 'Hack') {
+        return hackC;
+      } else if(d.collective == 'Drive') {
+        return driveC;
+      } else if (d.collective == 'Global'){
+        return global;
+      }
+    });
 }
-
-
 
   d3.select('toggleTimeline').on('click', function(){
       console.log("toggleTimelineOn")
       // console.log(back)
-      back=1;
+      if (back==1){
+        goBack();
+      }
+      else {
       highlight();
-      $("#small_multiples").hide("slow",function(){
+    }
+      $("#network").hide("slow",function(){
       })
-      $("#clicked").show("slow",function(){
+      $("#bars").show("slow",function(){
       // highlight();
       })
   })
@@ -486,11 +605,11 @@ return 0;
       console.log("toggleClusterOn")
       // doNodes();
       force.start();
-      back=0;
+      back=1;
       //show them slowly
-      $("#clicked").hide("slow",function(){
+      $("#bars").hide("slow",function(){
       })
-      $("#small_multiples").show("slow",function(){
+      $("#network").show("slow",function(){
       })
   })
 
