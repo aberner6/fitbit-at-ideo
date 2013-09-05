@@ -312,6 +312,7 @@ function toggleBack(){
 //    graphView.selectAll("rect")
 //    .attr("opacity", ".6");
 // }
+var xAligned = width/2-110;
 d3.select('toggleHack').on('click', function(){
     back=1;
     console.log("toggleHACK")
@@ -329,7 +330,7 @@ d3.select('toggleHack').on('click', function(){
         return -10;
       }
     })
-    .attr("x", width/2-150)
+    .attr("x", xAligned)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -359,7 +360,7 @@ d3.select('toggleIgnite').on('click', function(){
         return -10;
     }
     })
-    .attr("x", width/2-150)
+    .attr("x", xAligned)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -389,7 +390,7 @@ d3.select('toggleIgnite').on('click', function(){
         return -10;
       }
     })
-    .attr("x", width/2-150)
+    .attr("x", xAligned)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -419,7 +420,7 @@ d3.select('toggleIgnite').on('click', function(){
         return -10;
       }
     })
-    .attr("x", width/2-150)
+    .attr("x", xAligned)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -448,7 +449,7 @@ d3.select('toggleIgnite').on('click', function(){
         return -10;
       }
     })
-    .attr("x", width/2-150)
+    .attr("x", xAligned)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
@@ -480,7 +481,7 @@ d3.select('toggleDrive').on('click', function(){
         return -10;
       }
     })
-    .attr("x", width/2-150)
+    .attr("x", xAligned)
     .attr("height", function(d,i){
       if (d.score>0){
         return 15;
