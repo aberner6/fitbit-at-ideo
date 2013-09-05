@@ -242,31 +242,22 @@ return 0;
         return global;
       }
     })
-
-
-
     .on('mouseover', function(d,i){
     d3.select(this)
     .style("stroke","black")
     .style("stroke-width","2")
-    // highlight(d);
   })
   .on('mouseout', function(d,i){
     d3.select(this)
     .style("stroke","none")
     .style("stroke-width","0")  
-    // rectBack();
   })
-
-
-
-
-    rect
-    .transition()
-    .duration(700)
-    .attr("height", function(d,i){ 
- return toggleScale(d.score);
-    })
+  rect
+  .transition()
+  .duration(700)
+  .attr("height", function(d,i){ 
+    return toggleScale(d.score);
+  })
 
   $('rect').tipsy({ 
         gravity: 'nw', 
@@ -280,14 +271,54 @@ return 0;
       });
       var groupis;
 
-  // d3.select('toggleHack')
-  // .on('mouseover', function(d,i){
-  //   d3.select(this)
-  //   toggle("Hack");
-  // })
-  // .on('mouseout', function(d,i){
-  //   toggleBack();
-  // });
+  $('toggleDrive').hoverIntent({
+    over: function(){
+      toggle("Drive");
+    },
+    out: function(){
+      toggleBack();
+    }
+  })
+  $('toggleHack').hoverIntent({
+    over: function(){
+      toggle("Hack");
+    },
+    out: function(){
+      toggleBack();
+    }
+  })
+  $('toggleIgnite').hoverIntent({
+    over: function(){
+      toggle("Ignite");
+    },
+    out: function(){
+      toggleBack();
+    }
+  })
+  $('toggleRoot').hoverIntent({
+    over: function(){
+      toggle("Root");
+    },
+    out: function(){
+      toggleBack();
+    }
+  })
+  $('toggleForm').hoverIntent({
+    over: function(){
+      toggle("Form");
+    },
+    out: function(){
+      toggleBack();
+    }
+  })
+  $('toggleGlobal').hoverIntent({
+    over: function(){
+      toggle("Global");
+    },
+    out: function(){
+      toggleBack();
+    }
+  })
 }
 
 function toggle(groupis){
@@ -308,10 +339,7 @@ function toggleBack(){
   // .duration(200)
   .attr("opacity", ".6");
 }
-// if (back==1){
-//    graphView.selectAll("rect")
-//    .attr("opacity", ".6");
-// }
+
 var xAligned = width/2-110;
 function switchView(groupis){
   back=1;
