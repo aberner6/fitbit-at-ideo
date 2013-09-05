@@ -51,7 +51,7 @@ var toggleScale = d3.scale.linear()
 var alongWidth = d3.scale.linear()
   .domain([0, maxResponse]) //gotta be total people
   // .range([width/2-maxResponse*8, width/2+maxResponse*8]);
-  .range([width/2-maxResponse*4, width/2+maxResponse*6]);
+  .range([width/2-maxResponse*5, width/2+maxResponse*8.8]);
 
 var centerHeight = d3.scale.linear()
   .domain([0, maxResponse/3]) //gotta be total people
@@ -280,66 +280,16 @@ return 0;
       });
       var groupis;
 
-  d3.select('toggleHack')
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    toggle("Hack");
-  })
-  .on('mouseout', function(d,i){
-    toggleBack();
-  });
-  d3.select('toggleDrive')
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    toggle("Drive");
-  })
-  .on('mouseout', function(d,i){
-    toggleBack();
-  });
-  d3.select('toggleForm')
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    toggle("Form");
-  })
-  .on('mouseout', function(d,i){
-    toggleBack();
-  });
-  d3.select('toggleIgnite')
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    toggle("Ignite");
-  })
-  .on('mouseout', function(d,i){
-    toggleBack();
-  });
-  d3.select('toggleGlobal')
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    toggle("Global");
-  })
-  .on('mouseout', function(d,i){
-    toggleBack();
-  });
-  d3.select('toggleRoot')
-  .on('mouseover', function(d,i){
-    d3.select(this)
-    toggle("Root");
-  })
-  .on('mouseout', function(d,i){
-    toggleBack();
-  });
+  // d3.select('toggleHack')
+  // .on('mouseover', function(d,i){
+  //   d3.select(this)
+  //   toggle("Hack");
+  // })
+  // .on('mouseout', function(d,i){
+  //   toggleBack();
+  // });
 }
 
-// function mouseOut(){
-//   setTimeout(function(){
-//     toggleBack();
-//   }, 500)
-// }
-
-// $('toggleHack').hoverIntent({
-//     over: toggle("Hack"),
-//     out: toggleBack(),
-// });
 function toggle(tagis){
   graphView.selectAll("rect")
     .attr("opacity", function(d,i){
