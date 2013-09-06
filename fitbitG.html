@@ -65,9 +65,10 @@ svg {display: block; width: 100%; margin: 40;}
 </style>
 <link href="css/style.css" rel="stylesheet" type="text/css" /> 
 <link href="css/tipsy.css" rel="stylesheet" type="text/css" /> 
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script> 
+<!-- <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script> 
 <script type="text/javascript" src="js/jquery.tipsy.js"></script>
 <script type="text/javascript" src="js/jquery.hoverIntent.js"></script>
+<script src="js/jquery.reveal.js"></script> -->
 
 <script src="https://dl.dropboxusercontent.com/u/97059/fitbit/d3.v3.min.js"></script>
 <body>
@@ -78,6 +79,18 @@ svg {display: block; width: 100%; margin: 40;}
 </h1>
 </header>
 
+<!-- <h3> -->
+<div id="modeMoved">
+IDEOers are earning points by taking steps and making connections with other Fitbit/ers:<br> 
++ 1 point for every step they take<br>
++ 1 point for every 5 steps taken by connections within their Collective<br>
++ 1 point for every 10 steps taken by connections outside their Collective.
+<br><br>
+You’ll know a connection has been made every time you see a pair of Fitbiters getting their picture taken <br> in front of the Connection Graph poster in San Francisco or Palo Alto. <br> Once each pair posts their pics to the Fitbit Story Stream (an internal Facebook Group) <br> they’ll be earning points from each others’ steps. 
+<!-- </span> -->
+<br><br>
+</div>
+<!-- </h3> -->
 
 <center>
 <h3>
@@ -123,7 +136,10 @@ svg {display: block; width: 100%; margin: 40;}
       </div>
 </center>
 
-<!-- <div id="subtitle">IDEOers are earning points by taking steps and making connections with other Fitbit/ers:<br> 
+<center>
+<h3>
+<div id="modal">
+IDEOers are earning points by taking steps and making connections with other Fitbit/ers:<br> 
 + 1 point for every step they take<br>
 + 1 point for every 5 steps taken by connections within their Collective<br>
 + 1 point for every 10 steps taken by connections outside their Collective.
@@ -131,7 +147,31 @@ svg {display: block; width: 100%; margin: 40;}
 You’ll know a connection has been made every time you see a pair of Fitbiters getting their picture taken <br> in front of the Connection Graph poster in San Francisco or Palo Alto. <br> Once each pair posts their pics to the Fitbit Story Stream (an internal Facebook Group) <br> they’ll be earning points from each others’ steps. 
 </span>
 <br><br>
-</div> -->
+</div>
+</h3>
+</center>
+
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="js/jquery.tipsy.js"></script>
+<script type="text/javascript" src="js/jquery.hoverIntent.js"></script>
+<script src="js/jquery.reveal.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // $('#button').click(function(e) { // Button which will activate our modal
+          $('#modal').reveal({ // The item which will be opened with reveal
+            animation: 'fade',                   // fade, fadeAndPop, none
+          animationspeed: 600,                       // how fast animtions are
+          closeonbackgroundclick: true,              // if you click background will modal close?
+          dismissmodalclass: 'close'    // the class of a button or element that will close an open modal
+        });
+      return false;
+      // });
+    });
+  </script>
+
+
+
 <script type="text/javascript" src="js/fb.js"></script>
 <center>
 <div id="bars" style="display:none"></div>

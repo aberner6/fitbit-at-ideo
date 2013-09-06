@@ -19,17 +19,12 @@ var thick = 4; //thickness for highlighting, mouseovers
 var lmargin = 15; //left margin
 textmargin = 5; //text justifications
 
-igniteC = "#F16531";
-igniteC2 = "#d14511";
-rootC = "#EC008B";
-rootC2 = "#cC006B";
-formC = "#00B159";
-formC2 = "#009139";
-hackC = "#46C3D2";
-hackC2 = "#26a3b2";
-driveC = "#FFCE00";
-driveC2 = "#dFaE00";
-global = "#2A329B";
+var ignite = "#F16531";
+var root = "#EC008B";
+var form = "#00B159";
+var hack = "#46C3D2";
+var drive = "#FFCE00";
+var global = "#2A329B";
 
 var scoreMult = 3000;
 
@@ -158,15 +153,15 @@ var node = networkView.selectAll("g.node")
     })
     .attr("fill", function(d){
       if(d.collective == 'Ignite') {
-        return igniteC;
+        return ignite;
       } else if(d.collective == 'Root') {
-        return rootC;
+        return root;
       } else if(d.collective == 'Form') {
-        return formC;
+        return form;
       } else if(d.collective == 'Hack') {
-        return hackC;
+        return hack;
       } else if(d.collective == 'Drive') {
-        return driveC;
+        return drive;
       } else if (d.collective == 'Global'){
         return global;
       }
@@ -192,19 +187,15 @@ var node = networkView.selectAll("g.node")
 
   force.on("tick", tick);
 function tick(){
-// force.on("tick", function() {
   link.attr("x1", function(d) { return d.source.x; })
     .attr("y1", function(d) { return d.source.y; })
     .attr("x2", function(d) { return d.target.x; })
     .attr("y2", function(d) { return d.target.y; });
 
-
   node.attr("transform", function(d) { 
     return "translate(" + d.x + "," + d.y + ")";
     });
 };
-
-// });
 
 function redraw() {
   node.attr("transform",
@@ -227,6 +218,74 @@ function redraw() {
 function zoom() {
   networkView.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
+  $('toggleDrive').hoverIntent({
+    over: function(){
+      netToggle("Drive");
+    },
+    out: function(){
+      netToggleBack();
+    }
+  })
+  $('toggleHack').hoverIntent({
+    over: function(){
+      netToggle("Hack");
+    },
+    out: function(){
+      netToggleBack();
+    }
+  })
+  $('toggleIgnite').hoverIntent({
+    over: function(){
+      netToggle("Ignite");
+    },
+    out: function(){
+      netToggleBack();
+    }
+  })
+  $('toggleRoot').hoverIntent({
+    over: function(){
+      netToggle("Root");
+    },
+    out: function(){
+      netToggleBack();
+    }
+  })
+  $('toggleForm').hoverIntent({
+    over: function(){
+      netToggle("Form");
+    },
+    out: function(){
+      netToggleBack();
+    }
+  })
+  $('toggleGlobal').hoverIntent({
+    over: function(){
+      netToggle("Global");
+    },
+    out: function(){
+      netToggleBack();
+    }
+  })
+
+function netToggle(groupis){
+  node
+  .transition()
+  .attr("opacity", function(d,i){
+    if (d.collective==groupis){
+      return ".8";
+    }
+    else {
+      return ".15";
+    }
+  })
+}
+
+function netToggleBack(){
+  node
+  .transition()
+  .attr("opacity", ".8");
+}
+
 }
 
 var back=0;
@@ -257,15 +316,15 @@ return 0;
   .attr("opacity",".6")
   .attr("fill", function(d){
       if(d.collective == 'Ignite') {
-        return igniteC;
+        return ignite;
       } else if(d.collective == 'Root') {
-        return rootC;
+        return root;
       } else if(d.collective == 'Form') {
-        return formC;
+        return form;
       } else if(d.collective == 'Hack') {
-        return hackC;
+        return hack;
       } else if(d.collective == 'Drive') {
-        return driveC;
+        return drive;
       } else if (d.collective == 'Global'){
         return global;
       }
